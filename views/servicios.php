@@ -112,10 +112,7 @@
         <a href="index.php?action=nosotros">Nosotros</a>
         <a href="index.php?action=servicios">Servicios</a>
         <a href="index.php?action=contactanos">Contáctanos</a>
-    </nav>
-    <h2>Basic CRUD Application</h2>
-    <p>Click the buttons on datagrid toolbar to do crud actions.</p>
-    
+    </nav>    
     <table id="dg" title="My Users" class="easyui-datagrid" style="width:700px;height:250px"
             url="./models/select.php"
             toolbar="#toolbar" pagination="true"
