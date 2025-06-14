@@ -95,3 +95,112 @@
                 border-top: 1px solid #aa2222;
             }
         }
+
+                :root {
+            --uta-rojo: #8B0000;
+            --uta-oscuro: #6b0000;
+            --uta-claro: #f9f9f9;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            width: 400px;
+            padding: 2rem;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: var(--uta-rojo);
+            margin: 0;
+        }
+
+        .login-header h2 {
+            color: var(--uta-oscuro);
+            margin: 0.5rem 0 0;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background-color: var(--uta-rojo);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--uta-oscuro);
+        }
+
+        .error {
+            color: #d9534f;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .success {
+            color: #5cb85c;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            background: #eee;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: var(--uta-rojo);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media screen and (max-width: 480px) {
+            .login-container {
+                width: 90%;
+                padding: 1.5rem;
+            }
+        }

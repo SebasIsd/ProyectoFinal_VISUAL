@@ -99,7 +99,6 @@
             }
         }
     </style>
-</head>
 <body>
     <nav>
         <a href="index.php?action=inicio">Inicio</a>
@@ -107,13 +106,11 @@
         <a href="index.php?action=servicios">Servicios</a>
         <a href="index.php?action=contactanos">Contáctanos</a>
     </nav>
-<head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body class="bg-light">
 
 <div class="container mt-5">
-    <button class="btn btn-primary mb-3" onclick="showModal()">Nuevo Estudiante</button>
     <table class="table table-bordered table-hover" id="studentsTable">
         <thead class="table-dark">
             <tr>  
@@ -122,51 +119,12 @@
                 <th>APELLIDO</th>
                 <th>TELÉFONO</th>
                 <th>EMAIL</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
            
         </tbody>
     </table>
-</div>
-
-<div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <form id="studentForm" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel">Nuevo Estudiante</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="id" name="id">
-        <div class="mb-3">
-          <label for="ID_CED" class="form-label">Cédula</label>
-          <input type="text" class="form-control" id="ID_CED" name="ID_CED" required>
-        </div>
-        <div class="mb-3">
-          <label for="NOM_EST" class="form-label">Nombre</label>
-          <input type="text" class="form-control" id="NOM_EST" name="NOM_EST" required>
-        </div>
-        <div class="mb-3">
-          <label for="APE_EST" class="form-label">Apellido</label>
-          <input type="text" class="form-control" id="APE_EST" name="APE_EST" required>
-        </div>
-        <div class="mb-3">
-          <label for="TEL_EST" class="form-label">Teléfono</label>
-          <input type="text" class="form-control" id="TEL_EST" name="TEL_EST" required>
-        </div>
-        <div class="mb-3">
-          <label for="COR_EST" class="form-label">Correo Electrónico</label>
-          <input type="email" class="form-control" id="COR_EST" name="COR_EST" required>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-      </div>
-    </form>
-  </div>
 </div>
 
 <script>
@@ -187,10 +145,6 @@ function loadStudents() {
                         <td>${est.APE_EST}</td>
                         <td>${est.TEL_EST}</td>
                         <td>${est.COR_EST}</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning me-1" onclick='editStudent(${JSON.stringify(est)})'>Editar</button>
-                            <button class="btn btn-sm btn-danger" onclick='deleteStudent("${est.ID_CED}")'>Eliminar</button>
-                        </td>
                     </tr>`;
             });
         } else {

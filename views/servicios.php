@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php?action=login");
+    exit();
+}
+?>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
@@ -13,19 +20,35 @@
             --uta-claro: #f9f9f9;
         }
 
+        /* Estilos solo para elementos fuera de EasyUI */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--uta-claro);
         }
 
-        nav {
+        /* Encabezado de la universidad */
+        .university-header {
+            text-align: center;
+            padding: 1rem;
+            background-color: white;
+            border-bottom: 2px solid var(--uta-rojo);
+        }
+        
+        .university-header h1, 
+        .university-header h2 {
+            margin: 0.2rem 0;
+            color: var(--uta-rojo);
+        }
+
+        /* Barra de navegación */
+        .custom-nav {
             background-color: var(--uta-oscuro);
             display: flex;
             justify-content: center;
         }
 
-        nav a {
+        .custom-nav a {
             color: white;
             padding: 1rem 2rem;
             display: inline-block;
@@ -33,11 +56,12 @@
             font-weight: bold;
         }
 
-        nav a:hover {
+        .custom-nav a:hover {
             background-color: rgba(139, 14, 14, 0.838);
         }
 
-        main {
+        /* Contenedor principal - solo afecta al contenedor, no a su contenido */
+        .main-container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 2rem;
@@ -46,91 +70,69 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
 
-        h1, h2 {
-            color: var(--uta-rojo);
-            text-align: center;
-        }
-
-        .grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .grid > div {
-            flex: 1 1 45%;
-            background: #f0f0f0;
-            padding: 1rem;
-            border-left: 5px solid var(--uta-rojo);
-            border-radius: 6px;
-        }
-
-        .valores {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .valores ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .valores li {
-            margin: 0.5rem 0;
-        }
-
-        footer {
+        /* Pie de página */
+        .custom-footer {
             background-color: var(--uta-rojo);
             color: white;
             text-align: center;
             padding: 1rem;
             font-size: 0.9rem;
             position: relative;
-            bottom: 0;
             width: 100%;
         }
 
+        /* Estilos específicos para el datagrid de EasyUI */
+        .easyui-datagrid {
+            margin: 20px auto;
+        }
+
+        /* Ajustes responsivos */
         @media screen and (max-width: 768px) {
-            .grid {
+            .custom-nav {
                 flex-direction: column;
             }
 
-            nav {
-                flex-direction: column;
-            }
-
-            nav a {
+            .custom-nav a {
                 border-top: 1px solid #aa2222;
+                text-align: center;
+            }
+            
+            .main-container {
+                padding: 1rem;
+                margin: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <nav>
+    <nav class="custom-nav">
         <a href="index.php?action=inicio">Inicio</a>
         <a href="index.php?action=nosotros">Nosotros</a>
         <a href="index.php?action=servicios">Servicios</a>
         <a href="index.php?action=contactanos">Contáctanos</a>
-    </nav>    
-    <table id="dg" title="My Users" class="easyui-datagrid" style="width:700px;height:250px"
-            url="./models/select.php"
-            toolbar="#toolbar" pagination="true"
-            rownumbers="true" fitColumns="true" singleSelect="true">
-        <thead>
-            <tr>
-                <th field="ID_CED" width="50">CEDULA</th>
-                <th field="NOM_EST" width="50">NOMBRE</th>
-                <th field="APE_EST" width="50">APELLIDO</th>
-                <th field="TEL_EST" width="50">TELEFONO</th>
-                <th field="COR_EST" width="50">CORREO ELECTRONICO</th>
-            </tr>
-        </thead>
-    </table>
-    <div id="toolbar">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">Nuevo</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Editar</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Eliminar</a>
+    </nav>  
+    <h3>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></h3>
+    
+    <div class="main-container">
+        <table id="dg" title="My Users" class="easyui-datagrid" style="width:100%;height:400px"
+                url="./models/select.php"
+                toolbar="#toolbar" pagination="true"
+                rownumbers="true" fitColumns="true" singleSelect="true">
+            <thead>
+                <tr>
+                    <th field="ID_CED" width="50">CEDULA</th>
+                    <th field="NOM_EST" width="50">NOMBRE</th>
+                    <th field="APE_EST" width="50">APELLIDO</th>
+                    <th field="TEL_EST" width="50">TELEFONO</th>
+                    <th field="COR_EST" width="50">CORREO ELECTRONICO</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="toolbar">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">Nuevo</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Editar</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Eliminar</a>
+        </div>
     </div>
     
     <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
@@ -157,6 +159,11 @@
         <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
     </div>
+    
+    <footer class="custom-footer">
+        Derechos Reservados © Cuarto Software
+    </footer>
+
     <script type="text/javascript">
         var url;
         function newUser(){

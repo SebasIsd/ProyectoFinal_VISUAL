@@ -1,13 +1,8 @@
 <html>
 <head>
   
-    <title>UTA</title>
-    <link rel="stylesheet" type="text/css" href="jquery/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="jquery/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="jquery/themes/color.css">
-    <link rel="stylesheet" type="text/css" href="jquery/demo/demo.css">
-    <script type="text/javascript" src="jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="jquery/jquery.easyui.min.js"></script>
+    <title>Sistema de Estudiantes</title>
+
 
 </head>
 
@@ -23,7 +18,7 @@
             $mvc -> enlacesPaginasController();
         ?> 
 	</section>
-
+<br>
 <hr><br>
 
     <footer>
