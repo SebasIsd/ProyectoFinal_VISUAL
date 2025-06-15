@@ -1,10 +1,15 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php?action=login");
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
+    include_once "login.php";
     exit();
 }
 ?>
+
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
@@ -111,7 +116,7 @@ if (!isset($_SESSION['user_id'])) {
         <a href="index.php?action=servicios">Servicios</a>
         <a href="index.php?action=contactanos">Contáctanos</a>
     </nav>  
-    <h3>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></h3>
+    <h3>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?></h3>
     
     <div class="main-container">
         <table id="dg" title="My Users" class="easyui-datagrid" style="width:100%;height:400px"
