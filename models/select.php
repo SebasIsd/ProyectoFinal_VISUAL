@@ -1,7 +1,7 @@
 <?php 
     include_once "conexion.php";  
 
-    $sql = "SELECT * FROM estudiantes";
+    $sql = "SELECT * FROM ESTUDIANTES";
     $respuesta = pg_query($conn, $sql);  
     $resultado = array();
 

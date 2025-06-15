@@ -125,38 +125,41 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
                 rownumbers="true" fitColumns="true" singleSelect="true">
             <thead>
                 <tr>
-                    <th field="ID_CED" width="50">CEDULA</th>
-                    <th field="NOM_EST" width="50">NOMBRE</th>
-                    <th field="APE_EST" width="50">APELLIDO</th>
-                    <th field="TEL_EST" width="50">TELEFONO</th>
-                    <th field="COR_EST" width="50">CORREO ELECTRONICO</th>
+                    <th field="id_ced" width="50">CEDULA</th>
+                    <th field="nom_est" width="50">NOMBRE</th>
+                    <th field="ape_est" width="50">APELLIDO</th>
+                    <th field="tel_est" width="50">TELEFONO</th>
+                    <th field="cor_est" width="50">CORREO ELECTRONICO</th>
                 </tr>
             </thead>
         </table>
-        <div id="toolbar">
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">Nuevo</a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Editar</a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Eliminar</a>
-        </div>
+     <?php if (isset($_SESSION['cargo']) && $_SESSION['cargo'] === 'admin'): ?>
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">Nuevo</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Editar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Eliminar</a>
+    </div>
+<?php endif; ?>
+
     </div>
     
     <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
             <h3>User Information</h3>
             <div style="margin-bottom:10px">
-                <input name="ID_CED" class="easyui-textbox" required="true" label="Cedula:" style="width:100%">
+                <input name="id_ced" class="easyui-textbox" required="true" label="Cedula:" style="width:100%" >
             </div>
             <div style="margin-bottom:10px">
-                <input name="NOM_EST" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
+                <input name="nom_est" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <input name="APE_EST" class="easyui-textbox" required="true" label="Apellido:" style="width:100%">
+                <input name="ape_est" class="easyui-textbox" required="true" label="Apellido:" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <input name="TEL_EST" class="easyui-textbox" required="true" label="Telefono:" style="width:100%">
+                <input name="tel_est" class="easyui-textbox" required="true" label="Telefono:" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <input name="COR_EST" class="easyui-textbox" required="true" label="Correo:" style="width:100%">
+                <input name="cor_est" class="easyui-textbox" required="true" label="Correo:" style="width:100%">
             </div>
         </form>
     </div>
@@ -181,7 +184,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
             if (row){
                 $('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit User');
                 $('#fm').form('load',row);
-                url = 'editar.php?id='+row.id;
+                url = './models/editar.php?id='+row.id_ced;
             }
         }
         function saveUser(){
@@ -210,7 +213,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
             if (row){
                 $.messager.confirm('Confirm','Are you sure you want to destroy this user?',function(r){
                     if (r){
-                        $.post('models/eliminar.php',{id:row.ID_CED},function(result){
+                        $.post('models/eliminar.php',{id_ced:row.id_ced},function(result){
                             if (result.success){
                                 $('#dg').datagrid('reload');    // reload the user data
                             } else {

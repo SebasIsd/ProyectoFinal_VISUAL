@@ -1,14 +1,20 @@
 <?php
 include_once 'conexion.php';
 
-if (!isset($_POST['ID_CED'])) {
+session_start();
+
+if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || $_SESSION['cargo'] !== 'admin') {
+    echo json_encode(['errorMsg' => 'Acceso denegado. No tienes permisos suficientes.']);
+    exit();
+}
+if (!isset($_POST['id_ced']) || empty($_POST['id_ced'])) {
     echo json_encode(['errorMsg' => 'ID_CED no recibido.']);
     exit;
 }
 
-$cedula = $_POST['ID_CED']; // Recibe desde JS
+$cedula = $_POST['id_ced']; // Recibe desde JS
 
-$sqlBorrar = "DELETE FROM ESTUDIANTES WHERE ID_CED = $1";
+$sqlBorrar = "DELETE FROM estudiantes WHERE id_ced = $1";
 $result = pg_query_params($conn, $sqlBorrar, array($cedula));
 
 if ($result) {
