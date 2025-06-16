@@ -2,7 +2,7 @@
 <head>
     <style>
         :root {
-            --uta-rojo: #8B0000;
+            --uta-rojo: #6c1313;
             --uta-oscuro: #6b0000;
             --uta-claro: #f9f9f9;
         }
@@ -99,6 +99,7 @@
             }
         }
     </style>
+</head>
 <body>
     <nav>
         <a href="index.php?action=inicio">Inicio</a>
@@ -106,103 +107,38 @@
         <a href="index.php?action=servicios">Servicios</a>
         <a href="index.php?action=contactanos">Contáctanos</a>
     </nav>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-</head>
-<body class="bg-light">
 
-<div class="container mt-5">
-    <table class="table table-bordered table-hover" id="studentsTable">
-        <thead class="table-dark">
-            <tr>  
-                <th>CÉDULA</th>
-                <th>NOMBRE</th>
-                <th>APELLIDO</th>
-                <th>TELÉFONO</th>
-                <th>EMAIL</th>
-            </tr>
-        </thead>
-        <tbody>
-           
-        </tbody>
-    </table>
-</div>
+    <main>
+        <h1>Bienvenidos</h1>
+        <p style="text-align:center; font-size: 1.1rem;">
+            Este es el portal institucional de la Universidad Técnica de Ambato. Desde aquí puedes acceder a los servicios académicos, administrativos y de vinculación con la comunidad.
+        </p>
 
-<script>
-document.addEventListener("DOMContentLoaded", loadStudents);
+        <div class="grid">
+            <div>
+                <h2>Misión</h2>
+                <p style="text-align: justify">
+                    Formar profesionales lideres competentes, con vision humanista y pensamiento critico, atraves de la Docencia, la investigacion y la Vinculacion, que apliquen, promuevan y difundan el conocimiento respondiendo a las necesiades del pais.
+                </p>
+            </div>
+            <div>
+                <h2>Visión</h2>
+                <p style="text-align: justify">
+                    La carrera de Software de la Facultad de Ingenieria en Sistemas, Electronica e Industrial de la Universidad Tecnica de Ambato por sus niveles de excelencia, se constituira como un centro de formación superior con liderazgo y proyeccion nacional e internacional.
+                </p>
+            </div>
+        </div>
 
-function loadStudents() {
-    fetch('models/select.php')
-    .then(res => res.json())
-    .then(data => {
-        const tbody = document.querySelector("#studentsTable tbody");
-        tbody.innerHTML = '';
-        if (Array.isArray(data)) {
-            data.forEach(est => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${est.ID_CED}</td>
-                        <td>${est.NOM_EST}</td>
-                        <td>${est.APE_EST}</td>
-                        <td>${est.TEL_EST}</td>
-                        <td>${est.COR_EST}</td>
-                    </tr>`;
-            });
-        } else {
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center">${data}</td></tr>`;
-        }
-    });
-}
-
-function showModal() {
-    document.getElementById("studentForm").reset();
-    document.getElementById("id").value = "";
-    new bootstrap.Modal(document.getElementById('studentModal')).show();
-}
-
-function editStudent(estudiante) {
-    for (const key in estudiante) {
-        if (document.getElementById(key)) {
-            document.getElementById(key).value = estudiante[key];
-        }
-    }
-    new bootstrap.Modal(document.getElementById('studentModal')).show();
-}
-
-document.getElementById("studentForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    fetch('models/guardar.php', {
-        method: 'POST',
-        body: formData
-    }).then(res => res.json())
-      .then(result => {
-        if (result.success) {
-            bootstrap.Modal.getInstance(document.getElementById('studentModal')).hide();
-            loadStudents();
-        } else {
-            alert(result.message || "Error al guardar.");
-        }
-    });
-});
-
-function deleteStudent(id) {
-    if (confirm("¿Seguro que quieres eliminar este estudiante?")) {
-        fetch('models/delete.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'id=' + encodeURIComponent(id)
-        }).then(res => res.json())
-          .then(result => {
-            if (result.success) {
-                loadStudents();
-            } else {
-                alert(result.message || "No se pudo eliminar.");
-            }
-        });
-    }
-}
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+        <div class="valores">
+            <h2>Valores Institucionales</h2>
+            <ul>
+                <li>✔ Responsabilidad</li>
+                <li>✔ Transparencia</li>
+                <li>✔ Solidaridad</li>
+                <li>✔ Compromiso</li>
+                <li>✔ Excelencia</li>
+            </ul>
+        </div>
+    </main>
 </body>
 </html>
