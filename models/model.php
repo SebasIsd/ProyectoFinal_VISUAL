@@ -5,7 +5,8 @@ public static function enlacesPaginasModel($enlacemodel){
 
     if ($enlacemodel== "nosotros"||
         $enlacemodel== "servicios" ||
-        $enlacemodel== "contactanos" ) 
+        $enlacemodel== "contactanos" ||
+        $enlacemodel== "login" ) 
 
         {
                $module= "views/".$enlacemodel.".php";

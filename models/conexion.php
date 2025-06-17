@@ -1,14 +1,11 @@
 <?php
-    $servername = "localhost";    // servidor, generalmente localhost
-    $username = "root";     // tu usuario de la base de datos
-    $password = "";  // tu contraseña
-    $dbname = "cuarto"; // nombre de la base de datos
+    $host = "localhost";
+    $port = "5432";
+    $dbname = "cuarto";
+    $user = "postgres";
+    $password = "ligacampeon";
 
-    // Crear conexión
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
 
-    // Verificar conexión
-    if ($conn->connect_error) {
-        die("Conexión fallida: " . $conn->connect_error);
-    }
+  
 ?>
