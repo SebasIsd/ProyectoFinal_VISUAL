@@ -252,10 +252,6 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
         <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
     </div>
-    
-    <footer class="custom-footer">
-        Derechos Reservados © Cuarto Software
-    </footer>
 
     <script type="text/javascript">
         var url;
