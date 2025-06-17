@@ -60,14 +60,15 @@ COMMIT;
 CREATE TABLE usuarios (
   usuario VARCHAR(50) PRIMARY KEY,
   contrasena VARCHAR(100) NOT NULL,
+  nombre varchar(100) NOT NULL,
   cargo VARCHAR(20) NOT NULL CHECK (cargo IN ('admin', 'secretaria'))
 );
 INSERT INTO usuarios (usuario, contrasena, cargo) VALUES
-('admin1', 'admin123', 'admin'),
-('secretaria1', 'secre456', 'secretaria'),
-('admin2', 'claveAdmin', 'admin'),
-('secre2', 'passwordSec', 'secretaria'),
-('soporte1', 'soporte123', 'admin');  -- válido porque es 'admin'
+('admin1', 'admin123','Jose Luis', 'admin'),
+('secretaria1', 'secre456','Maria Vega', 'secretaria'),
+('admin2', 'claveAdmin','Mario Perez' ,'admin'),
+('secre2', 'passwordSec','Luisa Martinez', 'secretaria'),
+('soporte1', 'soporte123','Administrador','admin');  -- válido porque es 'admin'
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

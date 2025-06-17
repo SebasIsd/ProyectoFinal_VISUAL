@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     if (empty($input_username) || empty($input_password)) {
         $error = "Por favor ingrese usuario y contraseña";
     } else {
-        $result = pg_prepare($conn, "login_query", "SELECT usuario, contrasena, cargo FROM usuarios WHERE usuario = $1");
+        $result = pg_prepare($conn, "login_query", "SELECT usuario, contrasena,nombre, cargo FROM usuarios WHERE usuario = $1");
         $result = pg_execute($conn, "login_query", array($input_username));
 
         if ($result && pg_num_rows($result) == 1) {
@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 $_SESSION['username'] = $user['usuario'];
                 $_SESSION['cargo'] = $user['cargo'];
                 $_SESSION['user_id'] = $user['usuario'];
+                $_SESSION['nombre'] = $user['nombre'];
 
                 header("Location: index.php?action=servicios");
                 exit();

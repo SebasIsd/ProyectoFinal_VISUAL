@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
+if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESSION['nombre'])) {
     include_once "login.php";
     exit();
 }
@@ -200,10 +200,10 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
     <a href="index.php?action=nosotros">Nosotros</a>
     <a href="index.php?action=servicios">Servicios</a>
     <a href="index.php?action=contactanos">Contáctanos</a>
-    <a href="logout.php" class="logout-link">Cerrar sesión</a> <!-- Enlace de logout -->
+    <a href="views/logout.php" class="logout-link">Cerrar sesión</a> <!-- Enlace de logout -->
 </nav>
 
-    <h3>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?></h3>
+    <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></h2>
     
     <div class="main-container">
         <table id="dg" title="My Users" class="easyui-datagrid" style="width:100%;height:400px"
