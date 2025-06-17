@@ -195,12 +195,14 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
     </style>
 </head>
 <body>
-    <nav class="custom-nav">
-        <a href="index.php?action=inicio">Inicio</a>
-        <a href="index.php?action=nosotros">Nosotros</a>
-        <a href="index.php?action=servicios">Servicios</a>
-        <a href="index.php?action=contactanos">Contáctanos</a>
-    </nav>  
+<nav class="custom-nav">
+    <a href="index.php?action=inicio">Inicio</a>
+    <a href="index.php?action=nosotros">Nosotros</a>
+    <a href="index.php?action=servicios">Servicios</a>
+    <a href="index.php?action=contactanos">Contáctanos</a>
+    <a href="logout.php" class="logout-link">Cerrar sesión</a> <!-- Enlace de logout -->
+</nav>
+
     <h3>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?></h3>
     
     <div class="main-container">
