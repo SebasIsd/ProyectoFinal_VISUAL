@@ -19,18 +19,23 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
     <style>
-        :root {
-            --uta-rojo: #8B0000;
-            --uta-oscuro: #6b0000;
-            --uta-claro: #f9f9f9;
-        }
+    :root {
+      --uta-rojo: #8B0000;
+      --uta-oscuro: #6b0000;
+      --uta-claro: #f9f9f9;
+      --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transicion: all 0.3s ease;
+    }
 
-        /* Estilos solo para elementos fuera de EasyUI */
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--uta-claro);
-        }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--uta-claro);
+      color: #333;
+      line-height: 1.6;
+    }
 
         /* Encabezado de la universidad */
         .university-header {
@@ -107,6 +112,86 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo'])) {
                 margin: 1rem;
             }
         }
+        nav {
+      background-color: var(--uta-oscuro);
+      display: flex;
+      justify-content: center;
+      box-shadow: var(--sombra);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: white;
+      padding: 1.2rem 2rem;
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: var(--transicion);
+      position: relative;
+    }
+
+    nav a:hover {
+      background-color: var(--uta-rojo);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: white;
+      transition: var(--transicion);
+    }
+
+    nav a:hover::after {
+      width: 70%;
+    }
+
+    footer {
+      background-color: var(--uta-rojo);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      font-size: 1rem;
+      width: 98,8%;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: var(--transicion);
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+      opacity: 0.9;
+    }
     </style>
 </head>
 <body>
