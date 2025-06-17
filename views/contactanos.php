@@ -304,7 +304,7 @@
       text-align: center;
       padding: 2rem;
       font-size: 1rem;
-      width: 100%;
+      width: 98,8%;
       margin-top: 3rem;
     }
 
