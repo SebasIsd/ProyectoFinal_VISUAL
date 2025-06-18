@@ -31,7 +31,7 @@ $colorClaro = [249, 249, 249];   // --uta-claro
 // Título
 $pdf->SetFont('Helvetica', 'B', 18);
 $pdf->SetTextColor(...$colorRojo);
-$pdf->Cell(0, 15, utf8_decode("Listado de Estudiantes"), 0, 1, 'C');
+$pdf->Cell(0, 15, utf8_decode("LISTADO DE ESTUDIANTES"), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Encabezados
@@ -42,8 +42,8 @@ $pdf->SetTextColor(255, 255, 255);
 $pdf->Cell(35, 10, utf8_decode("CÉDULA"), 1, 0, 'C', true);
 $pdf->Cell(35, 10, "NOMBRE", 1, 0, 'C', true);
 $pdf->Cell(35, 10, "APELLIDO", 1, 0, 'C', true);
-$pdf->Cell(40, 10, utf8_decode("TELÉFONO"), 1, 0, 'C', true);
-$pdf->Cell(45, 10, "CORREO", 1, 1, 'C', true);
+$pdf->Cell(30, 10, utf8_decode("TELÉFONO"), 1, 0, 'C', true);
+$pdf->Cell(50, 10, "CORREO", 1, 1, 'C', true);
 
 // Filas
 $pdf->SetFont('Arial', '', 10);
@@ -61,10 +61,10 @@ while ($fila = pg_fetch_assoc($resultado)) {
     $alternar = !$alternar;
 
     $pdf->Cell(35, 10, $cedula, 1, 0, 'C', true);
-    $pdf->Cell(35, 10, $nombre, 1, 0, 'L', true);
-    $pdf->Cell(35, 10, $apellido, 1, 0, 'L', true);
-    $pdf->Cell(40, 10, $telefono, 1, 0, 'C', true);
-    $pdf->Cell(45, 10, $correo, 1, 1, 'L', true);
+    $pdf->Cell(35, 10, $nombre, 1, 0, 'C', true);
+    $pdf->Cell(35, 10, $apellido, 1, 0, 'C', true);
+    $pdf->Cell(30, 10, $telefono, 1, 0, 'C', true);
+    $pdf->Cell(50, 10, $correo, 1, 1, 'L', true);
 }
 
 // Línea estética
