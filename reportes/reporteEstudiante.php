@@ -20,6 +20,7 @@ $resultado = pg_query($conn, $query);
 // Crear PDF
 $pdf = new FPDF();
 $pdf->AddPage();
+$pdf->Image('../images/logo.png', 10, 10, 20);  // 50 mm = 5 cm
 $pdf->SetTitle("Listado de Estudiantes");
 
 // Colores UTA
