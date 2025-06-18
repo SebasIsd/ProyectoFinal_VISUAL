@@ -300,10 +300,9 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
     </div>
 
     <div class="button-container">
-        <button id="botonPDF" class="custom-button" onclick="window.location.href='reportes/reporteEstudiante.php'">
+        <button id="botonPDF" class="custom-button" onclick="window.open('reportes/reporteEstudiante.php', '_blank')">
             <i class="fas fa-file-pdf"></i> Ver PDF
         </button>
-
         <button id="botonCedulaPDF" class="custom-button" disabled>
             <i class="fas fa-id-card"></i> Ver PDF por Cédula
         </button>
