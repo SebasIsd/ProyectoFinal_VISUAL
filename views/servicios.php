@@ -18,6 +18,8 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/demo/demo.css">
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
     :root {
       --uta-rojo: #8B0000;
@@ -192,6 +194,48 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
       text-decoration: underline;
       opacity: 0.9;
     }
+
+.custom-button {
+    background-color: var(--uta-rojo);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 1rem 0.5rem 0 0;
+    transition: background-color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
+    box-shadow: var(--sombra);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    opacity: 1;
+}
+
+.custom-button:hover:enabled {
+    background-color: var(--uta-oscuro);
+    transform: scale(1.03);
+}
+
+/* Botón deshabilitado visualmente */
+.custom-button:disabled {
+    background-color: transparent;
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.4;
+    box-shadow: none;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+
+
     </style>
 </head>
 <body>
@@ -251,9 +295,21 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
         </form>
     </div>
     <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Guardar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
     </div>
+
+    <div class="button-container">
+        <button id="botonPDF" class="custom-button" onclick="window.location.href='reportes/reporteEstudiante.php'">
+            <i class="fas fa-file-pdf"></i> Ver PDF
+        </button>
+
+        <button id="botonCedulaPDF" class="custom-button" disabled>
+            <i class="fas fa-id-card"></i> Ver PDF por Cédula
+        </button>
+    </div>
+
+
 
     <script type="text/javascript">
         var url;
@@ -311,5 +367,38 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
             }
         }
     </script>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        // Desactivar el botón al cargar la página
+        $('#botonCedulaPDF').prop('disabled', true);
+
+        // Detectar selección en el datagrid
+        $('#dg').datagrid({
+            onSelect: function(index, row){
+                $('#botonCedulaPDF').prop('disabled', false);
+                $('#botonCedulaPDF').data('cedula', row.id_ced);
+            },
+            onUnselectAll: function(){
+                $('#botonCedulaPDF').prop('disabled', true);
+                $('#botonCedulaPDF').removeData('cedula');
+            }
+        });
+        // Evento click del botón para generar el PDF
+        $('#botonCedulaPDF').click(function () {
+                var cedula = $(this).data('cedula');
+                if (cedula) {
+                    window.open('reportes/reporteCedula.php?cedula=' + encodeURIComponent(cedula), '_blank');
+                } else {
+                    $.messager.alert('Advertencia', 'Debe seleccionar una fila primero.');
+                }
+            });
+
+
+        });
+
+    </script>
+
+
 </body>
 </html>
