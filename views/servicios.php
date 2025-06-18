@@ -192,6 +192,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
       text-decoration: underline;
       opacity: 0.9;
     }
+
     </style>
 </head>
 <body>
@@ -251,10 +252,11 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
         </form>
     </div>
     <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Guardar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
     </div>
 
+    <button onclick="window.location.href='reportes/reporteEstudiante.php'">Ver PDF</button>
     <script type="text/javascript">
         var url;
         function newUser(){
