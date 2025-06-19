@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Guayaquil');
 require('../fpdf/fpdf.php');
 
 // Conexión a PostgreSQL
