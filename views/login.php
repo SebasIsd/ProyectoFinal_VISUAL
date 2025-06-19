@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
     $error = "Sesión expirada por inactividad. Por favor, inicie sesión nuevamente.";
 } else {
