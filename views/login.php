@@ -1,4 +1,8 @@
 <?php
+if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
+    $error = "Sesión expirada por inactividad. Por favor, inicie sesión nuevamente.";
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -219,6 +223,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
       width: 70%;
     }
 
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .modal {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: var(--sombra);
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .modal h3 {
+        margin-bottom: 1rem;
+        color: var(--uta-rojo);
+    }
+
+    .modal button {
+        background-color: var(--uta-rojo);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: var(--transicion);
+    }
+
+    .modal button:hover {
+        background-color: var(--uta-oscuro);
+    }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -268,6 +313,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             this.textContent = type === 'password' ? '👁️' : '🙈';
         });
     </script>
+
+    <?php if (isset($_GET['timeout']) && $_GET['timeout'] == 1): ?>
+    <div class="modal-overlay" id="sessionModal">
+        <div class="modal">
+            <h3>Sesión expirada</h3>
+            <p>Su sesión ha expirado por inactividad. Por favor, inicie sesión nuevamente.</p>
+            <button onclick="document.getElementById('sessionModal').style.display='none'">Aceptar</button>
+        </div>
+    </div>
+    <script>
+        // Mostrar modal automáticamente
+        document.getElementById('sessionModal').style.display = 'flex';
+    </script>
+<?php endif; ?>
+
 
 </body>
 </html>

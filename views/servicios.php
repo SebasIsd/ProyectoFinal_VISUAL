@@ -1,4 +1,21 @@
 <?php
+// Tiempo máximo de inactividad en segundos (2 minutos)
+$tiempo_inactividad = 120;
+
+// Si ya existe el tiempo de la última actividad
+if (isset($_SESSION['last_activity'])) {
+    $inactivo = time() - $_SESSION['last_activity'];
+    if ($inactivo > $tiempo_inactividad) {
+        // Destruir sesión y redirigir al login
+        session_unset();
+        session_destroy();
+        header("Location: index.php?action=login&timeout=1");
+        exit();
+    }
+}
+
+// Actualizar tiempo de última actividad
+$_SESSION['last_activity'] = time();
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
