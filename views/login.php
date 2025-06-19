@@ -15,13 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     if (empty($input_username) || empty($input_password)) {
         $error = "Por favor ingrese usuario y contraseña";
     } else {
-        $result = pg_prepare($conn, "login_query", "SELECT usuario, contrasena,nombre, cargo FROM usuarios WHERE usuario = $1");
+        $result = pg_prepare($conn, "login_query", "SELECT usuario, contrasena, nombre, cargo FROM usuarios WHERE usuario = $1");
         $result = pg_execute($conn, "login_query", array($input_username));
 
         if ($result && pg_num_rows($result) == 1) {
             $user = pg_fetch_assoc($result);
 
-            if ($input_password === $user['contrasena']) {
+            // Validar solo contraseña hasheada
+            if (password_verify($input_password, $user['contrasena'])) {
                 $_SESSION['username'] = $user['usuario'];
                 $_SESSION['cargo'] = $user['cargo'];
                 $_SESSION['user_id'] = $user['usuario'];
@@ -38,6 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="es">
