@@ -63,7 +63,7 @@ CREATE TABLE usuarios (
   nombre varchar(100) NOT NULL,
   cargo VARCHAR(20) NOT NULL CHECK (cargo IN ('admin', 'secretaria'))
 );
-INSERT INTO usuarios (usuario, contrasena, cargo) VALUES
+INSERT INTO usuarios VALUES
 ('admin1', 'admin123','Jose Luis', 'admin'),
 ('secretaria1', 'secre456','Maria Vega', 'secretaria'),
 ('admin2', 'claveAdmin','Mario Perez' ,'admin'),
