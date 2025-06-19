@@ -7,7 +7,6 @@ include_once "models/conexion.php";
 
 $error = '';
 $success = '';
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $input_username = trim($_POST['username']);
     $input_password = trim($_POST['password']);
@@ -15,38 +14,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     if (empty($input_username) || empty($input_password)) {
         $error = "Por favor ingrese usuario y contraseña";
     } else {
-        $result = pg_prepare($conn, "login_query", "SELECT usuario, contrasena, nombre, cargo FROM usuarios WHERE usuario = $1");
+        $result = pg_prepare($conn, "login_query", "SELECT usuario, contrasena, nombre, cargo, bloqueado FROM usuarios WHERE usuario = $1");
         $result = pg_execute($conn, "login_query", array($input_username));
 
         if ($result && pg_num_rows($result) == 1) {
             $user = pg_fetch_assoc($result);
 
-            // Validar solo contraseña hasheada
-            if (password_verify($input_password, $user['contrasena'])) {
-                $_SESSION['username'] = $user['usuario'];
-                $_SESSION['cargo'] = $user['cargo'];
-                $_SESSION['user_id'] = $user['usuario'];
-                $_SESSION['nombre'] = $user['nombre'];
-
-                header("Location: index.php?action=servicios");
-                exit();
+            // Verificar si está bloqueado
+            if ($user['bloqueado'] == 1) {
+                $error = "Este usuario está bloqueado. Contacte al administrador.";
             } else {
-                $error = "Credenciales incorrectas";
+                // Preparar intentos fallidos para este usuario
+                if (!isset($_SESSION['intentos'][$input_username])) {
+                    $_SESSION['intentos'][$input_username] = 0;
+                }
+
+                if (password_verify($input_password, $user['contrasena'])) {
+                    // Éxito en login: resetear intentos
+                    $_SESSION['intentos'][$input_username] = 0;
+
+                    $_SESSION['username'] = $user['usuario'];
+                    $_SESSION['cargo'] = $user['cargo'];
+                    $_SESSION['user_id'] = $user['usuario'];
+                    $_SESSION['nombre'] = $user['nombre'];
+
+                    header("Location: index.php?action=servicios");
+                    exit();
+                } else {
+                    // Incrementar intentos
+                    $_SESSION['intentos'][$input_username]++;
+
+                    if ($_SESSION['intentos'][$input_username] >= 3) {
+                        // Bloquear usuario en la base de datos
+                        pg_prepare($conn, "block_user", "UPDATE usuarios SET bloqueado = 1 WHERE usuario = $1");
+                        pg_execute($conn, "block_user", array($input_username));
+
+                        $error = "Has superado el número máximo de intentos. El usuario ha sido bloqueado.";
+                    } else {
+                        $error = "Credenciales incorrectas. Intento " . $_SESSION['intentos'][$input_username]. " de 3.";
+                    }
+                }
             }
         } else {
             $error = "Usuario no encontrado";
         }
     }
-    
 }
+
 ?>
 
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Login - Universidad Técnica de Ambato</title>
     <style>
         /* Mantenemos solo los estilos necesarios */
         :root {

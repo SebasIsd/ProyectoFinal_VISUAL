@@ -234,6 +234,13 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
     margin: 2rem 0;
 }
 
+h2{
+    color:var(--uta-oscuro);
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
 
 
     </style>
