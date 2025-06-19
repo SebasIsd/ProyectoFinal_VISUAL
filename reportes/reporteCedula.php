@@ -1,13 +1,19 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 require('../fpdf/fpdf.php');
-require('../models/conexion.php'); // Ya tiene conexión con pg_connect()
+require('../models/conexion.php'); // Ya tiene conexión con mysqli
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cedula'])) {
     $cedula = $_GET['cedula'];
 
-    $sqlSelect = "SELECT * FROM estudiantes WHERE ID_CED = $1";
-    $result = pg_query_params($conn, $sqlSelect, array($cedula));
+    $sqlSelect = "SELECT * FROM estudiantes WHERE id_ced = ?";
+    $stmt = $conn->prepare($sqlSelect);
+    if (!$stmt) {
+        die("Error en la preparación de la consulta: " . $conn->error);
+    }
+    $stmt->bind_param("s", $cedula);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     // Colores UTA
     $colorRojo = [139, 0, 0];        // --uta-rojo
@@ -41,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cedula'])) {
     $pdf->SetFont('Arial', '', 10);
     $pdf->SetTextColor(0);
 
-    if ($row = pg_fetch_assoc($result)) {
+    if ($row = $result->fetch_assoc()) {
         $pdf->SetFillColor(...$colorClaro);
 
         $pdf->Cell(30, 10, $row['id_ced'], 1, 0, 'C', true);
@@ -66,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cedula'])) {
     $pdf->Cell(0, 10, utf8_decode("Generado el ") . date('d/m/Y') . " a las " . date('H:i'), 0, 1, 'C');
 
     $pdf->Output();
+
+    $stmt->close();
+    $conn->close();
 } else {
     echo "Cédula no proporcionada correctamente.";
 }
