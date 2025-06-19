@@ -14,23 +14,29 @@ $apellido = $_POST['ape_est']  ?? '';
 $telefono = $_POST['tel_est']  ?? '';
 $correo   = $_POST['cor_est']  ?? '';
 
-// Validar que todos los campos estén llenos
 if (empty($cedula) || empty($nombre) || empty($apellido) || empty($telefono) || empty($correo)) {
     echo json_encode(['errorMsg' => 'Todos los campos son obligatorios.']);
     exit;
 }
 
-$sqlInsert = "INSERT INTO estudiantes (id_ced, nom_est, ape_est, tel_est, cor_est) 
-              VALUES ($1, $2, $3, $4, $5)";
+$sqlInsert = "INSERT INTO estudiantes (id_ced, nom_est, ape_est, tel_est, cor_est) VALUES (?, ?, ?, ?, ?)";
 
-// Usar pg_query_params para prevenir SQL Injection
-$result = pg_query_params($conn, $sqlInsert, array($cedula, $nombre, $apellido, $telefono, $correo));
+$stmt = $conn->prepare($sqlInsert);
 
-if ($result) {
-    echo json_encode("ok");
-} else {
-    echo json_encode("Error en la preparación de la consulta: " . pg_last_error($conn));
+if (!$stmt) {
+    echo json_encode(['errorMsg' => 'Error al preparar la consulta: ' . $conn->error]);
+    exit;
 }
 
-pg_close($conn);
+$stmt->bind_param("sssss", $cedula, $nombre, $apellido, $telefono, $correo);
+
+if ($stmt->execute()) {
+    echo json_encode("ok");
+} else {
+    echo json_encode(['errorMsg' => 'Error al insertar: ' . $stmt->error]);
+}
+
+$stmt->close();
+$conn->close();
 ?>
+
