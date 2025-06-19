@@ -228,12 +228,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 <label for="username">Usuario:</label>
                 <input type="text" id="username" name="username" required>
             </div>
-            <div class="form-group">
-                <label for="password">Contraseña:</label>
+        <div class="form-group">
+            <label for="password">Contraseña:</label>
+            <div style="position: relative;">
                 <input type="password" id="password" name="password" required>
+                <span id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
             </div>
+        </div>
+
             <button type="submit" name="login" class="btn">Iniciar Sesión</button>
         </form>
     </div>
+    <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    </script>
+
 </body>
 </html>
