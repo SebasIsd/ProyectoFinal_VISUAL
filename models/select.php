@@ -1,17 +1,19 @@
 <?php 
-    include_once "conexion.php";  
+include_once "conexion.php";
 
-    $sql = "SELECT * FROM ESTUDIANTES";
-    $respuesta = pg_query($conn, $sql);  
-    $resultado = array();
+$sql = "SELECT * FROM estudiantes";
+$result = $conn->query($sql);
+$resultado = array();
 
-    if (pg_num_rows($respuesta) > 0) {
-        while ($row = pg_fetch_assoc($respuesta)) {
-            array_push($resultado, $row);
-        }
-    } else {
-        $resultado = "No hay Estudiantes!!";
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        array_push($resultado, $row);
     }
+} else {
+    $resultado = "No hay Estudiantes!!";
+}
 
-    echo json_encode($resultado);
+echo json_encode($resultado);
+
+$conn->close();
 ?>
