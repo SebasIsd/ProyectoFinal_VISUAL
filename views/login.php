@@ -1,16 +1,28 @@
 <?php
+session_start();
+
 if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
     $error = "Sesión expirada por inactividad. Por favor, inicie sesión nuevamente.";
+} else {
+    $error = '';
 }
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-include_once "models/conexion.php";
-
-$error = '';
 $success = '';
+
+// Conexión MySQL (ajusta los datos a tu configuración)
+    $host = "yamanote.proxy.rlwy.net";
+    $port = 49129;
+    $dbname = "railway";
+    $username = "root";
+    $password = "CJVVXyfisbdkDCbXALbnrghJQVJpEYCw";
+
+    $conn = new mysqli($host, $username, $password, $dbname, $port);
+
+    // Verificar conexión
+    if ($conn->connect_error) {
+        die("Conexión fallida: " . $conn->connect_error);
+    }
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $input_username = trim($_POST['username']);
     $input_password = trim($_POST['password']);
@@ -18,23 +30,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     if (empty($input_username) || empty($input_password)) {
         $error = "Por favor ingrese usuario y contraseña";
     } else {
-        $result = pg_prepare($conn, "login_query", "SELECT usuario, contrasena, nombre, cargo, bloqueado FROM usuarios WHERE usuario = $1");
-        $result = pg_execute($conn, "login_query", array($input_username));
+        // Consulta preparada
+        $stmt = $conn->prepare("SELECT usuario, contrasena, nombre, cargo, bloqueado FROM usuarios WHERE usuario = ?");
+        $stmt->bind_param("s", $input_username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if ($result && pg_num_rows($result) == 1) {
-            $user = pg_fetch_assoc($result);
+        if ($result && $result->num_rows == 1) {
+            $user = $result->fetch_assoc();
 
-            // Verificar si está bloqueado
             if ($user['bloqueado'] == 1) {
                 $error = "Este usuario está bloqueado. Contacte al administrador.";
             } else {
-                // Preparar intentos fallidos para este usuario
                 if (!isset($_SESSION['intentos'][$input_username])) {
                     $_SESSION['intentos'][$input_username] = 0;
                 }
 
                 if (password_verify($input_password, $user['contrasena'])) {
-                    // Éxito en login: resetear intentos
                     $_SESSION['intentos'][$input_username] = 0;
 
                     $_SESSION['username'] = $user['usuario'];
@@ -45,26 +57,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     header("Location: index.php?action=servicios");
                     exit();
                 } else {
-                    // Incrementar intentos
                     $_SESSION['intentos'][$input_username]++;
 
                     if ($_SESSION['intentos'][$input_username] >= 3) {
-                        // Bloquear usuario en la base de datos
-                        pg_prepare($conn, "block_user", "UPDATE usuarios SET bloqueado = 1 WHERE usuario = $1");
-                        pg_execute($conn, "block_user", array($input_username));
+                        // Bloquear usuario
+                        $stmt_block = $conn->prepare("UPDATE usuarios SET bloqueado = 1 WHERE usuario = ?");
+                        $stmt_block->bind_param("s", $input_username);
+                        $stmt_block->execute();
 
                         $error = "Has superado el número máximo de intentos. El usuario ha sido bloqueado.";
                     } else {
-                        $error = "Credenciales incorrectas. Intento " . $_SESSION['intentos'][$input_username]. " de 3.";
+                        $error = "Credenciales incorrectas. Intento " . $_SESSION['intentos'][$input_username] . " de 3.";
                     }
                 }
             }
         } else {
-            $error = "Usuario no encontrado";
+            $error = "Credenciales incorrectas.";
         }
+
+        $stmt->close();
     }
 }
 
+$conn->close();
 ?>
 
 
