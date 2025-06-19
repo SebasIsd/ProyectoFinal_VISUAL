@@ -20,15 +20,23 @@ if (empty($cedula) || empty($nombre) || empty($apellido) || empty($telefono) || 
     exit;
 }
 
-$sqlUpdate = "UPDATE estudiantes SET nom_est = $1, ape_est = $2, tel_est = $3, cor_est = $4 WHERE id_ced = $5";
+$sqlUpdate = "UPDATE estudiantes SET nom_est = ?, ape_est = ?, tel_est = ?, cor_est = ? WHERE id_ced = ?";
 
-$result = pg_query_params($conn, $sqlUpdate, array($nombre, $apellido, $telefono, $correo, $cedula));
+$stmt = $conn->prepare($sqlUpdate);
 
-if ($result) {
-    echo json_encode(['success' => true]);
-} else {
-    echo json_encode(['errorMsg' => 'Error al actualizar: ' . pg_last_error($conn)]);
+if (!$stmt) {
+    echo json_encode(['errorMsg' => 'Error al preparar la consulta: ' . $conn->error]);
+    exit;
 }
 
-pg_close($conn);
+$stmt->bind_param("sssss", $nombre, $apellido, $telefono, $correo, $cedula);
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['errorMsg' => 'Error al actualizar: ' . $stmt->error]);
+}
+
+$stmt->close();
+$conn->close();
 ?>
