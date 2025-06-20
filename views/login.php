@@ -7,12 +7,11 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
 
 $success = '';
 
-// Conexión MySQL (ajusta los datos a tu configuración)
-    $host = "yamanote.proxy.rlwy.net";
-    $port = 49129;
-    $dbname = "railway";
-    $username = "root";
-    $password = "CJVVXyfisbdkDCbXALbnrghJQVJpEYCw";
+    $host = "sql100.infinityfree.com";
+    $port = 3306;
+    $dbname = "if0_39269077_railway";
+    $username = "if0_39269077";
+    $password = "UeUf6yUTW61";
 
     $conn = new mysqli($host, $username, $password, $dbname, $port);
 

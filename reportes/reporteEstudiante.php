@@ -3,11 +3,11 @@ date_default_timezone_set('America/Guayaquil');
 require('../fpdf/fpdf.php');
 
 // Conexión a MySQL
-    $host = "yamanote.proxy.rlwy.net";
-    $port = 49129;
-    $dbname = "railway";
-    $username = "root";
-    $password = "CJVVXyfisbdkDCbXALbnrghJQVJpEYCw";
+    $host = "sql100.infinityfree.com";
+    $port = 3306;
+    $dbname = "if0_39269077_railway";
+    $username = "if0_39269077";
+    $password = "UeUf6yUTW61";
 
     $conn = new mysqli($host, $username, $password, $dbname, $port);
 
@@ -15,7 +15,6 @@ require('../fpdf/fpdf.php');
     if ($conn->connect_error) {
         die("Conexión fallida: " . $conn->connect_error);
     }
-
 // Consulta
 $query = "SELECT * FROM estudiantes";
 $resultado = $conn->query($query);

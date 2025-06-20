@@ -59,7 +59,7 @@ ALTER TABLE `estudiantes`
 COMMIT;
 CREATE TABLE usuarios (
   usuario VARCHAR(50) PRIMARY KEY,
-  contrasena VARCHAR(100) NOT NULL,
+  contrasena VARCHAR(255) NOT NULL,
   nombre varchar(100) NOT NULL,
   cargo VARCHAR(20) NOT NULL CHECK (cargo IN ('admin', 'secretaria'))
 );
