@@ -1,12 +1,10 @@
 <?php
-// Tiempo máximo de inactividad en segundos (2 minutos)
-$tiempo_inactividad = 120;
+session_start();
+$tiempo_inactividad = 240;
 
-// Si ya existe el tiempo de la última actividad
 if (isset($_SESSION['last_activity'])) {
     $inactivo = time() - $_SESSION['last_activity'];
     if ($inactivo > $tiempo_inactividad) {
-        // Destruir sesión y redirigir al login
         session_unset();
         session_destroy();
         header("Location: index.php?action=login&timeout=1");
@@ -14,29 +12,24 @@ if (isset($_SESSION['last_activity'])) {
     }
 }
 
-// Actualizar tiempo de última actividad
 $_SESSION['last_activity'] = time();
-
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESSION['nombre'])) {
     include_once "login.php";
     exit();
 }
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <title>Sistema de Estudiantes</title>
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/color.css">
-    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/demo/demo.css">
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
     :root {
       --uta-rojo: #8B0000;
@@ -45,9 +38,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
       --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
       --transicion: all 0.3s ease;
     }
-
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
+    
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
@@ -55,83 +46,9 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
       color: #333;
       line-height: 1.6;
     }
-
-        /* Encabezado de la universidad */
-        .university-header {
-            text-align: center;
-            padding: 1rem;
-            background-color: white;
-            border-bottom: 2px solid var(--uta-rojo);
-        }
-        
-        .university-header h1, 
-        .university-header h2 {
-            margin: 0.2rem 0;
-            color: var(--uta-rojo);
-        }
-
-        /* Barra de navegación */
-        .custom-nav {
-            background-color: var(--uta-oscuro);
-            display: flex;
-            justify-content: center;
-        }
-
-        .custom-nav a {
-            color: white;
-            padding: 1rem 2rem;
-            display: inline-block;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .custom-nav a:hover {
-            background-color: rgba(139, 14, 14, 0.838);
-        }
-
-        /* Contenedor principal - solo afecta al contenedor, no a su contenido */
-        .main-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-
-        /* Pie de página */
-        .custom-footer {
-            background-color: var(--uta-rojo);
-            color: white;
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.9rem;
-            position: relative;
-            width: 100%;
-        }
-
-        /* Estilos específicos para el datagrid de EasyUI */
-        .easyui-datagrid {
-            margin: 20px auto;
-        }
-
-        /* Ajustes responsivos */
-        @media screen and (max-width: 768px) {
-            .custom-nav {
-                flex-direction: column;
-            }
-
-            .custom-nav a {
-                border-top: 1px solid #aa2222;
-                text-align: center;
-            }
-            
-            .main-container {
-                padding: 1rem;
-                margin: 1rem;
-            }
-        }
-        nav {
+    
+    /* Estilos mejorados para la navegación */
+    nav {
       background-color: var(--uta-oscuro);
       display: flex;
       justify-content: center;
@@ -140,288 +57,295 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['cargo']) || !isset($_SESS
       top: 0;
       z-index: 1000;
     }
-
+    
     nav a {
       color: white;
       padding: 1.2rem 2rem;
       text-decoration: none;
       font-weight: 500;
-      letter-spacing: 0.5px;
       transition: var(--transicion);
       position: relative;
     }
-
+    
     nav a:hover {
       background-color: var(--uta-rojo);
     }
-
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 3px;
+    
+    .main-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
       background: white;
-      transition: var(--transicion);
+      border-radius: 8px;
+      box-shadow: var(--sombra);
     }
-
-    nav a:hover::after {
-      width: 70%;
-    }
-
-    footer {
+    
+    .custom-button {
       background-color: var(--uta-rojo);
       color: white;
-      text-align: center;
-      padding: 2rem;
+      border: none;
+      padding: 0.8rem 1.5rem;
       font-size: 1rem;
-      width: 98,8%;
-      margin-top: 3rem;
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .footer-logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-links a {
-      color: white;
-      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 1rem 0.5rem 0 0;
       transition: var(--transicion);
     }
-
-    .footer-links a:hover {
-      text-decoration: underline;
-      opacity: 0.9;
+    
+    .custom-button:hover {
+      background-color: var(--uta-oscuro);
+      transform: scale(1.03);
     }
-
-.custom-button {
-    background-color: var(--uta-rojo);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 1rem 0.5rem 0 0;
-    transition: background-color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
-    box-shadow: var(--sombra);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    justify-content: center;
-    opacity: 1;
-}
-
-.custom-button:hover:enabled {
-    background-color: var(--uta-oscuro);
-    transform: scale(1.03);
-}
-
-/* Botón deshabilitado visualmente */
-.custom-button:disabled {
-    background-color: transparent;
-    color: #ccc;
-    cursor: not-allowed;
-    opacity: 0.4;
-    box-shadow: none;
-}
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 2rem 0;
-}
-
-h2{
-    color:var(--uta-oscuro);
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 2rem 0;
-}
-
-
+    
+    h2 {
+      color: var(--uta-oscuro);
+      text-align: center;
+      margin: 2rem 0;
+    }
     </style>
 </head>
 <body>
-<nav class="custom-nav">
-    <a href="index.php?action=inicio">Inicio</a>
-    <a href="index.php?action=nosotros">Nosotros</a>
-    <a href="index.php?action=servicios">Servicios</a>
-    <a href="index.php?action=contactanos">Contáctanos</a>
-    <a href="views/logout.php" class="logout-link">Cerrar sesión</a> <!-- Enlace de logout -->
-</nav>
+    <nav class="custom-nav">
+        <a href="index.php?action=inicio">Inicio</a>
+        <a href="index.php?action=nosotros">Nosotros</a>
+        <a href="index.php?action=servicios">Servicios</a>
+        <a href="index.php?action=contactanos">Contáctanos</a>
+        <a href="views/logout.php">Cerrar sesión</a>
+    </nav>
 
     <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></h2>
     
     <div class="main-container">
-        <table id="dg" title="My Users" class="easyui-datagrid" style="width:100%;height:400px"
+        <table id="dg" title="Listado de Estudiantes" class="easyui-datagrid" style="width:100%;height:400px"
                 url="./models/select.php"
                 toolbar="#toolbar" pagination="true"
                 rownumbers="true" fitColumns="true" singleSelect="true">
             <thead>
                 <tr>
-                    <th field="id_ced" width="50">CEDULA</th>
-                    <th field="nom_est" width="50">NOMBRE</th>
-                    <th field="ape_est" width="50">APELLIDO</th>
-                    <th field="tel_est" width="50">TELEFONO</th>
-                    <th field="cor_est" width="50">CORREO ELECTRONICO</th>
+                    <th field="ID_CED" width="50">Cédula</th>
+                    <th field="NOM_EST" width="50">Nombre</th>
+                    <th field="APE_EST" width="50">Apellido</th>
+                    <th field="TEL_EST" width="50">Teléfono</th>
+                    <th field="COR_EST" width="50">Correo</th>
                 </tr>
             </thead>
         </table>
-     <?php if (isset($_SESSION['cargo']) && $_SESSION['cargo'] === 'admin'): ?>
-    <div id="toolbar">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">Nuevo</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Editar</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Eliminar</a>
-    </div>
-<?php endif; ?>
-
+        
+        <?php if (isset($_SESSION['cargo']) && $_SESSION['cargo'] === 'admin'): ?>
+        <div id="toolbar">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">Nuevo</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Editar</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Eliminar</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addSecre()">Agregar Secretarias</a>
+        </div>
+        <?php endif; ?>
     </div>
     
+    <!-- Diálogo para agregar/editar -->
     <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
-        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-            <h3>User Information</h3>
-            <div style="margin-bottom:10px">
-                <input name="id_ced" class="easyui-textbox" required="true" label="Cedula:" style="width:100%" >
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="nom_est" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="ape_est" class="easyui-textbox" required="true" label="Apellido:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="tel_est" class="easyui-textbox" required="true" label="Telefono:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="cor_est" class="easyui-textbox" required="true" label="Correo:" style="width:100%">
-            </div>
-        </form>
+<form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+    <h3>Información del Estudiante</h3>
+    
+    <div style="margin-bottom:10px">
+        <input name="ID_CED" class="easyui-textbox" required="true" label="Cédula:" 
+               maxlength="10" validType="length[10,10]" inputmode="numeric"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10);" 
+               style="width:100%">
+    </div>
+    
+    <div style="margin-bottom:10px">
+        <input name="NOM_EST" class="easyui-textbox" required="true" label="Nombre:" 
+               maxlength="50" validType="length[1,50]"
+               oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '').slice(0,50);"
+               style="width:100%">
+    </div>
+    
+    <div style="margin-bottom:10px">
+        <input name="APE_EST" class="easyui-textbox" required="true" label="Apellido:" 
+               maxlength="50" validType="length[1,50]"
+               oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '').slice(0,50);"
+               style="width:100%">
+    </div>
+    
+    <div style="margin-bottom:10px">
+        <input name="TEL_EST" class="easyui-textbox" required="true" label="Teléfono:" 
+               maxlength="10" validType="length[7,15]" inputmode="numeric"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10);"
+               style="width:100%">
+    </div>
+    
+    <div style="margin-bottom:10px">
+        <input name="COR_EST" class="easyui-textbox" required="true" label="Correo:" 
+               validType="email"
+               maxlength="100"
+               style="width:100%">
+    </div>
+</form>
+
     </div>
     <div id="dlg-buttons">
         <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Guardar</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
     </div>
 
-    <div class="button-container">
-        <button id="botonPDF" class="custom-button" onclick="window.open('reportes/reporteEstudiante.php', '_blank')">
-            <i class="fas fa-file-pdf"></i> Ver PDF
+<!-- Modal para agregar secretaria -->
+<div id="dlg-secretaria" class="easyui-dialog" style="width:400px"
+     data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-secretaria-buttons'">
+    <form id="fm-secretaria" method="post" novalidate style="margin:0;padding:20px 50px">
+        <h3>Agregar Secretaria</h3>
+        <div style="margin-bottom:10px">
+            <input name="usuario" class="easyui-textbox" required="true" label="Usuario:" style="width:100%">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="nombre" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="contrasena" type="password" class="easyui-textbox" required="true" label="Clave:" style="width:100%">
+        </div>
+    </form>
+</div>
+
+<div id="dlg-secretaria-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveSecretaria()" style="width:90px">Guardar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="$('#dlg-secretaria').dialog('close')" style="width:90px">Cancelar</a>
+</div>
+
+    <!-- Botones para reportes -->
+    <div style="text-align:center;margin:20px 0">
+        <button class="custom-button" onclick="window.open('reportes/reporteEstudiante.php', '_blank')">
+            <i class="fas fa-file-pdf"></i> Generar Reporte General
         </button>
-        <button id="botonCedulaPDF" class="custom-button" disabled>
-            <i class="fas fa-id-card"></i> Ver PDF por Cédula
+        <button id="btnReporteCedula" class="custom-button" disabled>
+            <i class="fas fa-id-card"></i> Reporte por Cédula
         </button>
     </div>
 
-
-
-    <script type="text/javascript">
-        var url;
-        function newUser(){
-            $('#dlg').dialog('open').dialog('center').dialog('setTitle','New User');
-            $('#fm').form('clear');
-            url = './models/guardar.php';
+    <script>
+    // Variables globales
+    var url;
+    
+    // Función para nuevo estudiante
+    function newUser(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Estudiante');
+        $('#fm').form('clear');
+        url = './models/guardar.php';
+    }
+    
+    // Función para editar estudiante
+    function editUser(){
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Estudiante');
+            $('#fm').form('load',row);
+            url = './models/editar.php?ID_CED='+row.ID_CED;
         }
-        function editUser(){
-            var row = $('#dg').datagrid('getSelected');
-            if (row){
-                $('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit User');
-                $('#fm').form('load',row);
-                url = './models/editar.php?id='+row.id_ced;
-            }
-        }
-        function saveUser(){
-            $('#fm').form('submit',{
-                url: url,
-                iframe: false,
-                onSubmit: function(){
-                    return $(this).form('validate');
-                },
-                success: function(result){
-                    var result = eval('('+result+')');
+    }
+    
+    // Función para guardar (tanto nuevo como editar)
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(response){
+                try {
+                    var result = JSON.parse(response);
                     if (result.errorMsg){
                         $.messager.show({
-                            title: 'Se envio correctamente',
+                            title: 'Error',
                             msg: result.errorMsg
                         });
                     } else {
-                        $('#dlg').dialog('close');        // close the dialog
-                        $('#dg').datagrid('reload');    // reload the user data
+                        $('#dlg').dialog('close');
+                        $('#dg').datagrid('reload');
+                        $.messager.show({
+                            title: 'Éxito',
+                            msg: 'Operación realizada correctamente'
+                        });
                     }
+                } catch(e) {
+                    console.error("Error parsing JSON:", e, response);
+                }
+            }
+        });
+    }
+    
+    // Función para eliminar estudiante
+    function destroyUser(){
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            $.messager.confirm('Confirmar','¿Está seguro de eliminar este estudiante?',function(r){
+                if (r){
+                    $.post('./models/eliminar.php',{ID_CED:row.ID_CED},function(result){
+                        if (result.success){
+                            $('#dg').datagrid('reload');
+                            $.messager.show({
+                                title: 'Éxito',
+                                msg: 'Estudiante eliminado correctamente'
+                            });
+                        } else {
+                            $.messager.show({
+                                title: 'Error',
+                                msg: result.errorMsg || 'Error al eliminar'
+                            });
+                        }
+                    },'json');
                 }
             });
         }
-        function destroyUser(){
-            var row = $('#dg').datagrid('getSelected');
-            if (row){
-                $.messager.confirm('Confirm','Are you sure you want to destroy this user?',function(r){
-                    if (r){
-                        $.post('models/eliminar.php',{id_ced:row.id_ced},function(result){
-                            if (result.success){
-                                $('#dg').datagrid('reload');    // reload the user data
-                            } else {
-                                $.messager.show({    // show error message
-                                    title: 'Error',
-                                    msg: result.errorMsg
-                                });
-                            }
-                        },'json');
-                    }
-                });
-            }
-        }
-    </script>
-
-    <script type="text/javascript">
+    }
+    
+    // Configuración del botón de reporte por cédula
     $(document).ready(function(){
-        // Desactivar el botón al cargar la página
-        $('#botonCedulaPDF').prop('disabled', true);
-
-        // Detectar selección en el datagrid
         $('#dg').datagrid({
             onSelect: function(index, row){
-                $('#botonCedulaPDF').prop('disabled', false);
-                $('#botonCedulaPDF').data('cedula', row.id_ced);
+                $('#btnReporteCedula').prop('disabled', false);
+                $('#btnReporteCedula').data('cedula', row.ID_CED);
             },
             onUnselectAll: function(){
-                $('#botonCedulaPDF').prop('disabled', true);
-                $('#botonCedulaPDF').removeData('cedula');
+                $('#btnReporteCedula').prop('disabled', true);
             }
         });
-        // Evento click del botón para generar el PDF
-        $('#botonCedulaPDF').click(function () {
-                var cedula = $(this).data('cedula');
-                if (cedula) {
-                    window.open('reportes/reporteCedula.php?cedula=' + encodeURIComponent(cedula), '_blank');
-                } else {
-                    $.messager.alert('Advertencia', 'Debe seleccionar una fila primero.');
-                }
-            });
-
-
+        
+        $('#btnReporteCedula').click(function(){
+            var cedula = $(this).data('cedula');
+            if (cedula) {
+                window.open('reportes/reporteCedula.php?cedula=' + cedula, '_blank');
+            }
         });
+    });
+
+    function addSecre() {
+    $('#dlg-secretaria').dialog('open').dialog('center').dialog('setTitle', 'Nueva Secretaria');
+    $('#fm-secretaria').form('clear');
+}
+
+function saveSecretaria() {
+    $('#fm-secretaria').form('submit', {
+        url: './models/crear_secretaria.php',
+        onSubmit: function () {
+            return $(this).form('validate');
+        },
+        success: function (response) {
+            try {
+                var result = JSON.parse(response);
+                if (result.success) {
+                    $('#dlg-secretaria').dialog('close');
+                    $.messager.show({
+                        title: 'Éxito',
+                        msg: 'Secretaria creada correctamente'
+                    });
+                } else {
+                    $.messager.alert('Error', result.error || 'No se pudo crear secretaria', 'error');
+                }
+            } catch (e) {
+                console.error("Respuesta no válida:", response);
+            }
+        }
+    });
+}
 
     </script>
-
-
 </body>
 </html>
